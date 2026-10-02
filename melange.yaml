@@ -1,0 +1,43 @@
+package:
+  name: siegfried
+  version: 1.11.9
+  epoch: 0
+  description: Signature-based file format identification tool
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime: []
+
+environment:
+  contents:
+    keyring:
+      - https://packages.wolfi.dev/os/wolfi-signing.rsa.pub
+    repositories:
+      - https://packages.wolfi.dev/os
+    packages:
+      - busybox
+      - ca-certificates-bundle
+      - go
+      - git
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/richardlehane/siegfried
+      tag: v${{package.version}}
+      destination: ${{package.name}}
+      expected-commit: 7fb430be27d2284b2cf9390831707ae53d87a4c2
+
+  - uses: go/build
+    with:
+      packages: ./cmd/sf
+      output: sf
+      modroot: ${{package.name}}
+      ldflags: -s -w
+
+  - uses: strip
+
+  - name: Install startup script
+    runs: |
+      install -Dm755 sf-entrypoint "${{targets.destdir}}"/usr/local/bin/sf-entrypoint
+
