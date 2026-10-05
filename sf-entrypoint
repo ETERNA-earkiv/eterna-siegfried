@@ -3,13 +3,13 @@ set -e
 
 SIEGFRIED_HOST="${SIEGFRIED_HOST:-0.0.0.0}"
 SIEGFRIED_PORT="${SIEGFRIED_PORT:-5138}"
-SF_HOME="${XDG_DATA_HOME:-${HOME:-/home/nonroot}/.local/share}/siegfried"
+SF_HOME="${SF_HOME:-/data}"
 
 mkdir -p "$SF_HOME"
 
 if [ ! -f "$SF_HOME/default.sig" ]; then
     echo "[siegfried] Laddar ned signaturer..."
-    sf -update
+    sf -home "$SF_HOME" -update
 fi
 
-exec sf -serve "${SIEGFRIED_HOST}:${SIEGFRIED_PORT}"
+exec sf -home "$SF_HOME" -serve "${SIEGFRIED_HOST}:${SIEGFRIED_PORT}"

@@ -4,9 +4,9 @@ Minimal container-image för Siegfried, byggd med [melange](https://github.com/c
 
 Image: `ghcr.io/eterna-earkiv/siegfried:v1.11.9` och `latest` (linux/amd64, linux/arm64)
 
-`melange.yaml` bygger `sf` från källkod (låst commit). Signaturerna laddas ned vid första start till `~/.local/share/siegfried`.
+`melange.yaml` bygger `sf` från källkod (låst commit). Signaturerna laddas ned vid första start till `/data` (ändras med `SF_HOME`).
 
-Imagen körs som icke-root (uid 65532). Data ligger under `/data` – volymer som monteras där måste ägas av uid 65532.
+Imagen körs som icke-root (uid/gid 1000, samma som ETERNA) så att den kan läsa filerna i ETERNA:s storage. Data ligger under `/data` – volymer som monteras där måste ägas av uid 1000.
 
 ## Bygga lokalt
 
