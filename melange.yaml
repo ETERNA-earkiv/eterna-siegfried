@@ -37,6 +37,11 @@ pipeline:
 
   - uses: strip
 
+  # Signaturfilen från samma låsta commit; uppströms släpper en ny siegfried-version för varje PRONOM-release
+  - name: Install signature file
+    runs: |
+      install -Dm644 ${{package.name}}/cmd/roy/data/default.sig "${{targets.destdir}}"/usr/share/siegfried/default.sig
+
   - name: Install startup script
     runs: |
       install -Dm755 sf-entrypoint "${{targets.destdir}}"/usr/local/bin/sf-entrypoint
