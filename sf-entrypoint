@@ -3,11 +3,14 @@ set -e
 
 SIEGFRIED_HOST="${SIEGFRIED_HOST:-0.0.0.0}"
 SIEGFRIED_PORT="${SIEGFRIED_PORT:-5138}"
-SF_HOME="${SF_HOME:-/data}"
-
-mkdir -p "$SF_HOME"
+SF_HOME="${SF_HOME:-/usr/share/siegfried}"
 
 if [ ! -f "$SF_HOME/default.sig" ]; then
+    if [ "${SF_UPDATE_IF_MISSING:-false}" != "true" ]; then
+        echo "[siegfried] Ingen signaturfil i $SF_HOME (sätt SF_UPDATE_IF_MISSING=true för att ladda ned)" >&2
+        exit 1
+    fi
+    mkdir -p "$SF_HOME"
     echo "[siegfried] Laddar ned signaturer..."
     sf -home "$SF_HOME" -update
 fi

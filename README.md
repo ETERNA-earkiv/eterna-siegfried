@@ -4,9 +4,11 @@ Minimal container-image för Siegfried, byggd med [melange](https://github.com/c
 
 Image: `ghcr.io/eterna-earkiv/siegfried:v1.11.9` och `latest` (linux/amd64, linux/arm64)
 
-`melange.yaml` bygger `sf` från källkod (låst commit). Signaturerna laddas ned vid första start till `/data` (ändras med `SF_HOME`).
+`melange.yaml` bygger `sf` från källkod (låst commit) och lägger signaturfilen från samma commit i `/usr/share/siegfried`. Imagen anropar alltså inget utåt vid start, och samma tagg ger alltid samma signaturer. Uppströms släpper en ny siegfried-version för varje PRONOM-release, så nya signaturer får man genom att bumpa versionen.
 
-Imagen körs som icke-root (uid/gid 1000, samma som ETERNA) så att den kan läsa filerna i ETERNA:s storage. Data ligger under `/data` – volymer som monteras där måste ägas av uid 1000.
+Vill man köra en annan signaturfil: montera en katalog med `default.sig` och peka ut den med `SF_HOME`. Med `SF_UPDATE_IF_MISSING=true` laddas den ned från itforarchivists.com vid start om den saknas (det tidigare beteendet).
+
+Imagen körs som icke-root (uid/gid 1000, samma som ETERNA) så att den kan läsa filerna i ETERNA:s storage. Volymer som siegfried ska skriva till (t.ex. `/data` med `SF_UPDATE_IF_MISSING`) måste ägas av uid 1000.
 
 ## Bygga lokalt
 
